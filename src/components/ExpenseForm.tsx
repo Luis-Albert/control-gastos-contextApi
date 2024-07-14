@@ -45,7 +45,17 @@ export default function ExpenseForm() {
       return
     }
 
+    //Agregar un nuevo gasto al reducer
     dispatch({ type: "add-expense", payload: { expense } })
+
+    //reiniciar el state
+    setExpense({
+      amount: 0,
+      expenseName: "",
+      category: "",
+      date: new Date()
+    })
+    setError("")
   }
 
   return (
@@ -64,6 +74,7 @@ export default function ExpenseForm() {
           className="bg-slate-100 p-2"
           placeholder="Añade el nombre del gasto"
           name="expenseName"
+          value={expense.expenseName}
           onChange={handleChange}
         />
       </div>
@@ -78,6 +89,7 @@ export default function ExpenseForm() {
           className="bg-slate-100 p-2"
           placeholder="Añade la cantidad del gasto: Ej. 300"
           name="amount"
+          value={expense.amount}
           onChange={handleChange}
         />
       </div>
@@ -90,6 +102,7 @@ export default function ExpenseForm() {
           id="category"
           className="bg-slate-100 p-2"
           name="category"
+          value={expense.category}
           onChange={handleChange}
         >
           <option value="">--Seleccione--</option>
