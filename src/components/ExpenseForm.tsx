@@ -55,8 +55,15 @@ export default function ExpenseForm() {
       return
     }
 
-    //Agregar un nuevo gasto al reducer
-    dispatch({ type: "add-expense", payload: { expense } })
+    //Agregar o actualizar gasto al reducer
+    if (state.editingId) {
+      dispatch({
+        type: "update-expense",
+        payload: { expense: { id: state.editingId, ...expense } }
+      })
+    } else {
+      dispatch({ type: "add-expense", payload: { expense } })
+    }
 
     //reiniciar el state
     setExpense({
@@ -73,6 +80,7 @@ export default function ExpenseForm() {
       <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
         Nuevo Gasto
       </legend>
+      {state.editingId ? "Guardar Cambios" : "Nuevo Gasto"}
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <div className="flex flex-col gap-2">
         <label htmlFor="expenseName" className="text-xl">
@@ -138,7 +146,7 @@ export default function ExpenseForm() {
       <input
         type="submit"
         className="bg-blue-600 cursor-pointer uppercase font-bold rounde-lg text-white w-full p-2"
-        value="Registrar Gasto"
+        value={state.editingId ? "Actualizar Gasto" : "Registrar Gasto"}
       />
     </form>
   )
