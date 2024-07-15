@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { categories } from "../data/categories"
 import DatePicker from "react-date-picker"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import "react-date-picker/dist/DatePicker.css"
 import "react-calendar/dist/Calendar.css"
 import { DraftExpense, Value } from "../types"
@@ -16,7 +17,16 @@ export default function ExpenseForm() {
   })
 
   const [error, setError] = useState("")
-  const { dispatch } = useBudget()
+  const { dispatch, state } = useBudget()
+
+  useEffect(() => {
+    if (state.editingId) {
+      const editingExpense = state.expenses.filter(
+        (currentExpense) => currentExpense.id === state.editingId
+      )[0]
+      setExpense(editingExpense)
+    }
+  }, [state.editingId])
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
